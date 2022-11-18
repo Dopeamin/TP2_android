@@ -14,6 +14,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var classSpinner : Spinner;
     lateinit var recherche : EditText;
     lateinit var recyclerView : RecyclerView;
+    lateinit var checkbox: CheckBox
 
     var matieres = listOf<String>("Cours","TP")
 
@@ -22,12 +23,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         classSpinner = findViewById(R.id.spinner)
         recherche = findViewById(R.id.recherche)
+        checkbox = findViewById(R.id.checkBox2)
         recyclerView = findViewById<RecyclerView>(R.id.recycler)
         recyclerView.layoutManager = LinearLayoutManager(this)
         classSpinner.adapter = ArrayAdapter<String>(this,android.R.layout.simple_dropdown_item_1line,matieres)
         var etudiants = ArrayList<Etudiant>();
         etudiants.add(Etudiant("Hamdouni","Mohamed Amine","M", arrayListOf(Presence("TP",true),Presence("Cours", false))))
-        etudiants.add(Etudiant("Toulgui","Farah","G",arrayListOf(Presence("TP",true),Presence("Cours", true))))
+        etudiants.add(Etudiant("Sahnoun","Dali","M",arrayListOf(Presence("TP",true),Presence("Cours", true))))
         etudiants.add(Etudiant("Doe","John","M", arrayListOf(Presence("TP",false),Presence("Cours", false))))
         etudiants.add(Etudiant("Doe","Jane","G",arrayListOf(Presence("TP",false),Presence("Cours", true))))
         var adapter = Adapter(etudiants);
@@ -36,12 +38,18 @@ class MainActivity : AppCompatActivity() {
         classSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 Toast.makeText(this@MainActivity, "Cours choisi est : "+matieres[position], Toast.LENGTH_LONG).show()
-
+                adapter.updateMatiere(matieres[position])
             }
             override fun onNothingSelected(adapterView: AdapterView<*>?) {
+
             }
         }
 
         recherche.doOnTextChanged {text,start,before,count -> adapter.filter.filter(text)}
+
+        checkbox.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { _, isChecked ->
+            // write here your code for example ...
+            adapter.setShowOnlyPresent(isChecked)
+        })
     }
 }

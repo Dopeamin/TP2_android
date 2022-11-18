@@ -17,9 +17,17 @@ class Etudiant(nom:String,prenom:String, gender:String, presences : List<Presenc
     public fun getGender() : String {
         return this.gender;
     }
+
+    public fun setPresence(matiere: String , pres :Boolean){
+        presences.forEach{presence ->
+            if(presence.matiere == matiere) {
+                presence.presence = pres
+            }
+        }
+    }
 }
 
 class Presence(matiere:String,presence:Boolean){
     public val matiere = matiere;
-    public val presence = presence;
+    public var presence = presence;
 }
